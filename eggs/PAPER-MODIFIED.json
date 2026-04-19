@@ -1,0 +1,89 @@
+{
+    "_comment": "Created by Da Business LLC",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2026-03-31T13:38:59-06:00",
+    "name": "Paper (Modified)",
+    "author": "Hosting@dabuisness.cloud",
+    "description": "A drop-in replacement for Paper servers designed for configurability, and new fun and exciting gameplay features.",
+    "features": [
+        "eula",
+        "java_version",
+        "pid_limit"
+    ],
+    "docker_images": {
+        "OpenJDK's Java 25": "ghcr.io/pterodactyl/yolks:java_25",
+        "GraalVM's Java 22": "ghcr.io/trenutoo/pterodactyl-images:java_22_graalvm",
+        "GraalVM's Java 21": "ghcr.io/trenutoo/pterodactyl-images:java_21_graalvm",
+        "GraalVM's Java 20": "ghcr.io/akticube/containers:pterodactyl-graalvm-jdk20",
+        "GraalVM's Java 17": "ghcr.io/akticube/containers:pterodactyl-graalvm-jdk17-ee",
+        "GraalVM's Java 11": "ghcr.io/akticube/containers:pterodactyl-graalvm-jdk11-ee",
+        "GraalVM's Java 8": "ghcr.io/akticube/containers:pterodactyl-graalvm-jdk8-ee",
+        "OpenJDK's Java 21": "ghcr.io/pterodactyl/yolks:java_21",
+        "OpenJDK's Java 19": "ghcr.io/pterodactyl/yolks:java_19",
+        "OpenJDK's Java 18": "ghcr.io/pterodactyl/yolks:java_18",
+        "OpenJDK's Java 17": "ghcr.io/pterodactyl/yolks:java_17",
+        "OpenJDK's Java 16": "ghcr.io/pterodactyl/yolks:java_16",
+        "OpenJDK's Java 11": "ghcr.io/pterodactyl/yolks:java_11",
+        "OpenJDK's Java 8": "ghcr.io/pterodactyl/yolks:java_8"
+    },
+    "file_denylist": [],
+    "startup": "java -Xms256M -Xmx{{SERVER_MEMORY}}M -Dfile.encoding=UTF-8 -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -XX:+UseStringDeduplication -XX:+UseFastUnorderedTimeStamps -XX:+UseAES -XX:+UseAESIntrinsics -XX:UseSSE=4 -XX:AllocatePrefetchStyle=1 -XX:+UseLoopPredicate -XX:+RangeCheckElimination -XX:+EliminateLocks -XX:+DoEscapeAnalysis -XX:+UseCodeCacheFlushing -XX:+UseFastJNIAccessors -XX:+OptimizeStringConcat -XX:+UseCompressedOops -XX:+UseThreadPriorities -XX:+OmitStackTraceInFastThrow -XX:+TrustFinalNonStaticFields -XX:ThreadPriorityPolicy=1 -XX:+UseInlineCaches -XX:+RewriteBytecodes -XX:+RewriteFrequentPairs -XX:+UseNUMA -XX:-DontCompileHugeMethods -XX:+UseCMoveUnconditionally -XX:+UseFPUForSpilling -XX:+UseNewLongLShift -XX:+UseVectorCmov -XX:+UseXMMForArrayCopy -XX:+UseXmmI2D -XX:+UseXmmI2F -XX:+UseXmmLoadAndClearUpper -XX:+UseXmmRegToRegMoveAll -Djdk.nio.maxCachedBufferSize=262144 -Dgraal.CompilerConfiguration=community --add-modules jdk.incubator.vector -jar {{SERVER_JARFILE}} nogui",
+    "config": {
+        "files": "{\r\n    \"server.properties\": {\r\n        \"parser\": \"properties\",\r\n        \"find\": {\r\n            \"server-ip\": \"0.0.0.0\",\r\n            \"server-port\": \"{{server.build.default.port}}\",\r\n            \"max-world-size\": \"{{env.WORLD_SIZE}}\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \")! For help, type \"\r\n}",
+        "logs": "{}",
+        "stop": "stop"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/ash\n# Paper Installation Script\n#\n# Server Files: /mnt/server\nPROJECT=purpur\n\nif [ -n \"${DL_PATH}\" ]; then\n\techo -e \"Using supplied download url: ${DL_PATH}\"\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\nelse\n\tVER_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep true`\n\tLATEST_VERSION=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\n\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\n\telse\n\t\techo -e \"Using the latest ${PROJECT} version\"\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\n\tfi\n\t\n\tBUILD_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds.all | tostring | contains($BUILD)' | grep true`\n\tLATEST_BUILD=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r '.builds.latest'`\n\t\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\n\telse\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\n\t\tBUILD_NUMBER=${LATEST_BUILD}\n\tfi\n\t\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\n\t\n\techo \"Version being downloaded\"\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\n\techo -e \"Build: ${BUILD_NUMBER}\"\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\n\tDOWNLOAD_URL=https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION}/${BUILD_NUMBER}/download\nfi\n\ncd /mnt/server\necho -e \"Downloading Final NekoHosting Files... (1/6)\"\n    curl -o .pteroignore https://raw.githubusercontent.com/VanillaChan6571/NekoEggs/main/Minecraft%20Java/.pteroignore\n    curl -o server-icon.png https://raw.githubusercontent.com/RATR2/dabuisnessegg/refs/heads/main/root/server-icon.png\n    echo -e \"Downloading Final NekoHosting Files... (2/6)\"\n    curl -o server.properties https://raw.githubusercontent.com/RATR2/dabuisnessegg/refs/heads/main/root/server.properties\n    echo -e \"Downloading Final NekoHosting Files... (3/6)\"\n    curl -o paper.yml https://raw.githubusercontent.com/RATR2/dabuisnessegg/refs/heads/main/root/paper.yml\n    echo -e \"Downloading Final NekoHosting Files... (4/6)\"\n    curl -o spigot.yml https://raw.githubusercontent.com/RATR2/dabuisnessegg/refs/heads/main/root/spigot.yml\n    echo -e \"Downloading Final NekoHosting Files... (5/6)\"\n    curl -o purpur.yml https://raw.githubusercontent.com/RATR2/dabuisnessegg/refs/heads/main/root/purpur.yml\n    echo -e \"Downloading Final NekoHosting Files... (6/6)\"\n    curl -o bukkit.yml https://raw.githubusercontent.com/RATR2/dabuisnessegg/refs/heads/main/root/bukkit.yml\n    echo -e \"Verifying Files.\"\n    echo -e \"Verifying Files..\"\n    echo -e \"Verifying Files...\"\n    echo -e \"Verifying Files....\"\n    echo -e \"Verifying Files.....\"\n    echo -e \"Verifying Files......\"\ncd /mnt/server/\n\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\n\nif [ -f ${SERVER_JARFILE} ]; then\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\nfi\n\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\nfi",
+            "container": "ghcr.io/pterodactyl/installers:alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Minecraft Version",
+            "description": "The version of Minecraft to download. \r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
+            "env_variable": "MINECRAFT_VERSION",
+            "default_value": "1.21",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Server Jar File",
+            "description": "The name of the .jar file to run the server with.",
+            "env_variable": "SERVER_JARFILE",
+            "default_value": "server.jar",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|regex:/^([\\w\\d._-]+)(\\.jar)$/|max:80",
+            "field_type": "text"
+        },
+        {
+            "name": "Build Number",
+            "description": "The build number for the Purpur release.\r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
+            "env_variable": "BUILD_NUMBER",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Minecraft World Limit",
+            "description": "This limits how big the world can generate or load.",
+            "env_variable": "WORLD_SIZE",
+            "default_value": "15000",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        }
+    ]
+}
