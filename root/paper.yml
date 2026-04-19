@@ -17,10 +17,10 @@ verbose: false
 messages:
   kick:
     authentication-servers-down: ''
-    connection-throttle: \u00a7ePlease wait before reconnecting. (Connecting to fast!)
-    flying-player: \u00a7edetected unusual movement. (Fly or Lag Float)
-    flying-vehicle: \u00a7edetected unusual movement. (Floating in a boat or horse for too long!)
-  no-permission: '\u00a7cYou are missing the permissions for this command.'
+    connection-throttle: §ePlease wait before reconnecting. (Connecting to fast!)
+    flying-player: §edetected unusual movement. (Fly or Lag Float)
+    flying-vehicle: §edetected unusual movement. (Floating in a boat or horse for too long!)
+  no-permission: '§cYou are missing the permissions for this command.'
 timings:
   really-enabled: false
   enabled: true
