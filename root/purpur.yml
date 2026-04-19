@@ -1,0 +1,10 @@
+# This was modifed by R4T for Da Buisness LLC.
+
+settings:
+  use-alternate-keepalive: true
+  dont-send-useless-entity-packets: false
+  lagging-threshold: 19.0
+  allow-water-placement-in-the-end: true
+  disable-give-dropping: false
+  tps-catchup: true
+  server-mod-name: Da-Buisness-User-Server
