@@ -34,7 +34,7 @@ timings:
   - settings.seed
   history-interval: 300
   history-length: 3600
-  server-name: Da-Buisness-User-Server
+  server-name: DaBuisnessServer
 config-version: 25
 settings:
   max-joins-per-tick: 3

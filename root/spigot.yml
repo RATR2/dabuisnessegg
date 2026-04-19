@@ -10,7 +10,7 @@
 # Discord: https://www.spigotmc.org/go/discord
 # Forums: http://www.spigotmc.org/
 #
-# This was modifed by NekoHosting Default Downloads.
+# This was modifed by R4T for Da Buisness LLC.
 # VERSION: 1.4
 
 settings:
@@ -36,12 +36,12 @@ settings:
   log-villager-deaths: true
   log-named-deaths: true
 messages:
-  whitelist: You are not whitelisted on this server!
-  unknown-command: Unknown command. Type "/help" for help.
-  server-full: The server is full!
-  outdated-client: Outdated client! Please use {0}
-  outdated-server: Outdated server! I'm still on {0}
-  restart: Server is restarting
+  whitelist: \u00a7e\u00a7oYou are not whitelisted on this server!
+  unknown-command: \u00a7cUnknown command. \u00a77Type \u00a7o"/help"\u00a77 for help.
+  server-full: \u00a7eThe server is full!
+  outdated-client: \u00a76Outdated client! \u00a7cPlease use\u00a7r {0}
+  outdated-server: \u00a7cOutdated server! \u00a7eI'm still on\u00a7r {0}
+  restart: \u00a7e\u00a7oServer is restarting
 advancements:
   disable-saving: false
   disabled:

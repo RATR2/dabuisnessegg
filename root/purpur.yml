@@ -7,4 +7,4 @@ settings:
   allow-water-placement-in-the-end: true
   disable-give-dropping: false
   tps-catchup: true
-  server-mod-name: Da-Buisness-User-Server
+  server-mod-name: DaBuisnessServer
