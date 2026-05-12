@@ -1,0 +1,5 @@
+#By changing the setting below to TRUE you are indicating your agreement to our EULA (https://aka.ms/MinecraftEULA).
+#Tue May 12 15:14:06 CDT 2026
+eula=true
+
+#AUTOMATIC ACCEPTANCE WITH PURCHASE OF SERVER
